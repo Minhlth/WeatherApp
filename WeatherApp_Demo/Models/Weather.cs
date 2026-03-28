@@ -9,7 +9,7 @@ namespace WeatherApp_Demo.Models
         public int ID { get; set; }
         public string LocationName { get; set; } = string.Empty;
         public double Temperature { get; set; }
-        public string Condination { get; set; } = string.Empty;
+        public string Condition { get; set; } = string.Empty;
         public int Humidity { get; set; }
         public int UVIndex { get; set; }
         public int AQI { get; set; }
@@ -17,6 +17,7 @@ namespace WeatherApp_Demo.Models
      }
     public class DailyForecast
     {
+        public int ID { get; set; }
         public string DayName { get; set; } = string.Empty; 
         public double TempMin { get; set; }
         public double TempMax { get; set; }
