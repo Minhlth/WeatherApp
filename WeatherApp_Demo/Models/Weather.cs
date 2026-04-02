@@ -23,4 +23,11 @@ namespace WeatherApp_Demo.Models
         public double TempMax { get; set; }
         public string IconPath { get; set; } = string.Empty;
     }
+    public class HourlyForecastItem
+    {
+        public string Time { get; set; } = string.Empty; // Ví dụ: "Bây giờ", "15:00"
+        public double Temp { get; set; } // Ví dụ: 27
+        public string IconSource { get; set; } = string.Empty; // Link icon
+        public bool IsActive { get; set; } // Flag để tô màu thẻ đầu tiên
+    }
 }

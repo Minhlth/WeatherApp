@@ -7,7 +7,6 @@
         AllowsTransparency="True" 
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
-
     <Window.Resources>
         <Style x:Key="WeatherCardStyle" TargetType="Border">
             <Setter Property="Background" Value="#33FFFFFF"/>
@@ -18,8 +17,8 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
     </Window.Resources>
-
     <Border CornerRadius="30" ClipToBounds="True">
+       
         <Grid>
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
@@ -31,55 +30,115 @@
 
             <ScrollViewer VerticalScrollBarVisibility="Hidden" PanningMode="Both">
                 <StackPanel Margin="0,0,0,30">
-                    <StackPanel Margin="30,50,0,0">
-                        <TextBlock Text="Cao Quán" FontSize="24" Foreground="White" FontWeight="Bold"/>
-                        <TextBlock Text="Nhiều mây" FontSize="16" Foreground="White" Opacity="0.8"/>
+                    <StackPanel Grid.Row="0" Margin="30,50,0,0">
+                         <TextBlock Text="Cao Quán" FontSize="24" Foreground="White" FontWeight="Bold"/>
+                         <TextBlock Text="Nhiều mây" FontSize="16" Foreground="White" Opacity="0.8"/>
                     </StackPanel>
 
-                    <TextBlock Text="27°" FontSize="120" 
-                               Foreground="White" FontWeight="Light" 
-                               HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                 <TextBlock Grid.Row="1" Text="27°" FontSize="120" 
+                            Foreground="White" FontWeight="Light" 
+                            HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                    <Border Style="{StaticResource WeatherCardStyle}" Height="180">
+                        <Grid>
+                            <TextBlock Text="Dự báo 24 giờ" Foreground="White" FontWeight="Bold" Margin="0,-5,0,0"/>
 
-                    <UniformGrid Columns="2" Margin="10">
+                            <ScrollViewer x:Name="HourlyScrollViewer" 
+                                          Margin="0,20,0,0" 
+                                          HorizontalScrollBarVisibility="Hidden" 
+                                          VerticalScrollBarVisibility="Disabled" 
+                                          PanningMode="HorizontalOnly"
+                                          PreviewMouseWheel="HourlyScrollViewer_PreviewMouseWheel">
+                                <ItemsControl ItemsSource="{Binding HourlyCards}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Width="80" Height="130" Margin="0,0,10,0" CornerRadius="15" Padding="10">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#22FFFFFF"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                                <Setter Property="Background" Value="#388E3C"/>
+                                                                <Setter Property="BorderBrush" Value="#81C784"/>
+                                                                <Setter Property="BorderThickness" Value="2"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+
+                                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding Time}" Foreground="White" Opacity="0.7" FontSize="12" HorizontalAlignment="Center"/>
+                                                    <Image Source="{Binding IconSource}" Width="40" Height="40" Margin="0,15"/>
+                                                    <TextBlock Text="{Binding Temp, StringFormat={}{0}°}" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                    <UniformGrid Grid.Row="2" Columns="2" Rows="2" Margin="10">
                         <Border Style="{StaticResource WeatherCardStyle}">
-                            <Grid Height="150">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0">
-                                    <TextBlock Text="UV" Foreground="White" Opacity="0.7" FontSize="14"/>
-                                    <TextBlock Text="Yếu" Foreground="White" FontSize="18" FontWeight="Bold"/>
-                                </StackPanel>
-                                <Viewbox Grid.Row="1" Stretch="Uniform" VerticalAlignment="Center">
-                                    <lvc:AngularGauge Value="{Binding CurrentWeather.UVIndex}" 
-                                                      FromValue="0" ToValue="11" Wedge="180" 
-                                                      TicksStep="1" LabelsStep="11" Foreground="White"/>
-                                </Viewbox>
-                                <TextBlock Grid.Row="1" Text="{Binding CurrentWeather.UVIndex}" Foreground="White" 
-                                           FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                            </Grid>
-                        </Border>
+                    <Grid>
+                        <StackPanel VerticalAlignment="Top">
+                            <TextBlock Text="UV" Foreground="White" Opacity="0.7" FontSize="14"/>
+                            <TextBlock Text="Yếu" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                        </StackPanel>
 
-                        <Border Style="{StaticResource WeatherCardStyle}">
-                            <StackPanel Height="150">
-                                <TextBlock Text="Độ ẩm" Foreground="White" Opacity="0.7" FontSize="14"/>
-                                <TextBlock Text="65%" Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,20"/>
-                                <ProgressBar Value="65" Height="5" Background="#22FFFFFF" Foreground="White" BorderThickness="0"/>
-                            </StackPanel>
-                        </Border>
+                        <lvc:AngularGauge Value="{Binding CurrentWeather.UVIndex}" 
+                          FromValue="0" ToValue="11"
+                          LabelsStep="11" TicksStep="1"
+                          Wedge="180" Margin="0,20,0,0">
+                            <lvc:AngularGauge.Sections>
+                                <lvc:AngularSection FromValue="0" ToValue="3" Fill="Green"/>
+                                <lvc:AngularSection FromValue="3" ToValue="6" Fill="Yellow"/>
+                                <lvc:AngularSection FromValue="6" ToValue="11" Fill="Red"/>
+                            </lvc:AngularGauge.Sections>
+                        </lvc:AngularGauge>
 
-                    </UniformGrid>
+                        <TextBlock Text="{Binding CurrentWeather.UVIndex}" Foreground="White" 
+                   FontSize="24" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    </Grid>
+                </Border>
 
+                <Border Style="{StaticResource WeatherCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Độ ẩm" Foreground="White" Opacity="0.7" FontSize="14"/>
+                        <TextBlock Text="65%" Foreground="White" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Margin="0,20"/>
+                        <ProgressBar Value="65" Height="5" Background="#22FFFFFF" Foreground="White" BorderThickness="0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource WeatherCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Cảm giác như" Foreground="White" Opacity="0.7" FontSize="14"/>
+                        <TextBlock Text="27°" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,15"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource WeatherCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Gió" Foreground="White" Opacity="0.7" FontSize="14"/>
+                        <TextBlock Text="22,6 km/h" Foreground="White" FontSize="18" FontWeight="Bold" Margin="0,15"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
                     <Border Background="#33FFFFFF" CornerRadius="25" Margin="20,10,20,20" Padding="15">
                         <StackPanel>
                             <TextBlock Text="Lịch sử dữ liệu (30 bản ghi gần nhất)" Foreground="White" 
-                                       FontWeight="Bold" Margin="10,5,0,15"/>
+                                       FontWeight="Bold" Margin="10,0,0,15"/>
 
                             <ItemsControl x:Name="ForecastList">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="#11FFFFFF" BorderThickness="0,0,0,1" Padding="8">
+                                        <Border BorderBrush="#11FFFFFF" BorderThickness="0,0,0,1" Padding="10">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="2*"/>
@@ -96,12 +155,46 @@
                             </ItemsControl>
                         </StackPanel>
                     </Border>
+
+                    <Border Style="{StaticResource WeatherCardStyle}">
+                        <StackPanel>
+                            <Grid>
+                                <TextBlock Text="Chất lượng không khí" Foreground="White" Opacity="0.7" FontSize="14"/>
+                                <TextBlock Text="Tốt (44)" Foreground="White" HorizontalAlignment="Right" FontWeight="Bold"/>
+                            </Grid>
+
+                            <Grid Margin="0,15,0,5">
+                                <Border Height="8" CornerRadius="4">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop Color="#00E400" Offset="0.0" />
+                                            <GradientStop Color="#FFFF00" Offset="0.2" />
+                                            <GradientStop Color="#FF7E00" Offset="0.4" />
+                                            <GradientStop Color="#FF0000" Offset="0.6" />
+                                            <GradientStop Color="#8F3F97" Offset="0.8" />
+                                            <GradientStop Color="#7E0023" Offset="1.0" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+
+                                <Ellipse Width="12" Height="12" Fill="White" Stroke="Gray" StrokeThickness="1"
+                     HorizontalAlignment="Left" Margin="44,0,0,0">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect BlurRadius="5" ShadowDepth="1"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Grid>
+
+                            <TextBlock Text="Chỉ số hiện tại là 44, tương đương với mức tốt." 
+                   Foreground="White" FontSize="12" Opacity="0.8" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
-
-            <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                    Margin="0,15,20,0" Background="Transparent" BorderBrush="Transparent" 
-                    Foreground="White" FontSize="18" Click="CloseApp_Click" Cursor="Hand"/>
+                <Button Content="✕" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                        Margin="0,15,20,0" Background="Transparent" BorderBrush="Transparent" 
+                        Foreground="White" FontSize="18" Click="CloseApp_Click" Panel.ZIndex="10"/>
         </Grid>
     </Border>
+    
 </Window>
