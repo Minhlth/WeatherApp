@@ -9,9 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\cloudy.png" />
+    <None Remove="Assets\heavy-rain.png" />
+    <None Remove="Assets\sun.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\cloudy.png" />
+    <Resource Include="Assets\heavy-rain.png" />
+    <Resource Include="Assets\sun.png" />
   </ItemGroup>
 
 </Project>
