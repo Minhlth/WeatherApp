@@ -88,6 +88,35 @@ namespace WeatherApp_Demo
             }
             e.Handled = true; // Báo hiệu đã xử lý xong, không cuộn dọc cả trang web nữa
         }
+        private async void LoadRealWeatherData()
+        {
+            var service = new WeatherService();
+            try
+            {
+                var data = await service.GetWeatherAsync("Hanoi");
+
+                // Cập nhật lên giao diện
+                txtCityName.Text = data.name;
+                txtTemp.Text = $"{Math.Round(data.main.temp)}°";
+                txtDescription.Text = data.weather[0].description;
+
+                // Cập nhật các Gauge (Độ ẩm, gió...)
+                this.CurrentWeather = new Weather
+                {
+                    Temp = data.main.temp,
+                    Humidity = data.main.humidity,
+                    WindSpeed = data.wind.speed
+                    // ... gán tiếp các thông số khác
+                };
+
+                this.DataContext = null;
+                this.DataContext = this;
+            }
+            catch
+            {
+                MessageBox.Show("Không có kết nối Internet hoặc API Key chưa kích hoạt!");
+            }
+        }
         // Thêm namespace này lên đầu file: using WeatherApp_Demo.Models;
         public Weather? CurrentWeather { get; set; }
         public ChartValues<double> HourlyTempValues { get; set; } = new ChartValues<double>();
