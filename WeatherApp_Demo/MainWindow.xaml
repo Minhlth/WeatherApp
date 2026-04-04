@@ -55,7 +55,7 @@
                     <GradientStop Color="#5DADE2" Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
-            <Border Background="#33FFFFFF" CornerRadius="15" Margin="20,15,60,0" 
+           <Border Background="#33FFFFFF" CornerRadius="15" Margin="20,15,60,0" 
         Height="40" VerticalAlignment="Top" BorderBrush="#44FFFFFF" BorderThickness="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -88,8 +88,8 @@
                 BorderThickness="0" Foreground="White" Width="40"
                 Click="btnSearch_Click" Cursor="Hand"/>
                 </Grid>
-            </Border>
-            <ScrollViewer VerticalScrollBarVisibility="Hidden" PanningMode="Both">
+           </Border>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden" PanningMode="None">
                 <StackPanel Margin="0,0,0,30">
                     <StackPanel Grid.Row="0" Margin="30,50,0,0">
                         <TextBlock x:Name="txtCityName" Text="Cao Quán" FontSize="24" Foreground="White" FontWeight="Bold"/>
