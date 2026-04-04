@@ -30,6 +30,7 @@ namespace WeatherApp_Demo
             SetupTimer(); // Khởi động bộ đếm
             this.DataContext = this; // Binding data
             LoadHourlyCards();
+            LoadRealWeatherData("Hanoi");
         }
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
@@ -88,12 +89,12 @@ namespace WeatherApp_Demo
             }
             e.Handled = true; // Báo hiệu đã xử lý xong, không cuộn dọc cả trang web nữa
         }
-        private async void LoadRealWeatherData()
+        private async void LoadRealWeatherData(string cityName)
         {
             var service = new WeatherService();
             try
             {
-                var data = await service.GetWeatherAsync("Hanoi");
+                var data = await service.GetWeatherAsync(cityName);
 
                 // Cập nhật lên giao diện
                 txtCityName.Text = data.name;
@@ -103,9 +104,9 @@ namespace WeatherApp_Demo
                 // Cập nhật các Gauge (Độ ẩm, gió...)
                 this.CurrentWeather = new Weather
                 {
-                    Temp = data.main.temp,
+                    Temperature = data.main.temp,
                     Humidity = data.main.humidity,
-                    WindSpeed = data.wind.speed
+                    
                     // ... gán tiếp các thông số khác
                 };
 
@@ -114,7 +115,32 @@ namespace WeatherApp_Demo
             }
             catch
             {
-                MessageBox.Show("Không có kết nối Internet hoặc API Key chưa kích hoạt!");
+                MessageBox.Show("Không tìm thấy thành phố này! Vui lòng thử lại.");
+            }
+        }
+        // 1. Khi nhấn nút Search
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            ExecuteSearch();
+        }
+
+        // 2. Khi nhấn phím Enter trong ô nhập
+        private void txtSearchCity_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ExecuteSearch();
+            }
+        }
+
+        // 3. Hàm thực hiện tìm kiếm chung
+        private void ExecuteSearch()
+        {
+            string cityName = txtSearchCity.Text.Trim();
+            if (!string.IsNullOrEmpty(cityName))
+            {
+                // Gọi lại hàm Load dữ liệu với tên thành phố mới
+                LoadRealWeatherData(cityName);
             }
         }
         // Thêm namespace này lên đầu file: using WeatherApp_Demo.Models;

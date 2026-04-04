@@ -55,12 +55,45 @@
                     <GradientStop Color="#5DADE2" Offset="1.0" />
                 </LinearGradientBrush>
             </Grid.Background>
+            <Border Background="#33FFFFFF" CornerRadius="15" Margin="20,15,60,0" 
+        Height="40" VerticalAlignment="Top" BorderBrush="#44FFFFFF" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
+                    <TextBox x:Name="txtSearchCity" 
+                 Background="Transparent" BorderThickness="0" 
+                 Foreground="White" VerticalContentAlignment="Center"
+                 Padding="15,0" FontSize="14"
+                 KeyDown="txtSearchCity_KeyDown" />
+
+                    <TextBlock IsHitTestVisible="False" Text="Nhập tên thành phố..." 
+                   VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,0"
+                   Foreground="White" Opacity="0.5">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=txtSearchCity}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <Button Grid.Column="1" Content="🔍" Background="Transparent" 
+                BorderThickness="0" Foreground="White" Width="40"
+                Click="btnSearch_Click" Cursor="Hand"/>
+                </Grid>
+            </Border>
             <ScrollViewer VerticalScrollBarVisibility="Hidden" PanningMode="Both">
                 <StackPanel Margin="0,0,0,30">
                     <StackPanel Grid.Row="0" Margin="30,50,0,0">
-                         <TextBlock Text="Cao Quán" FontSize="24" Foreground="White" FontWeight="Bold"/>
-                         <TextBlock Text="Nhiều mây" FontSize="16" Foreground="White" Opacity="0.8"/>
+                        <TextBlock x:Name="txtCityName" Text="Cao Quán" FontSize="24" Foreground="White" FontWeight="Bold"/>
+                        <TextBlock x:Name="txtDescription" Text="Nhiều mây" FontSize="16" Foreground="White" Opacity="0.8"/>
                     </StackPanel>
                     <TextBlock Text="27°" 
                                FontSize="120" 
@@ -178,7 +211,7 @@
                 <Border Style="{StaticResource WeatherCardStyle}">
                     <StackPanel>
                         <TextBlock Text="Cảm giác như" Foreground="White" Opacity="0.7" FontSize="14"/>
-                        <TextBlock Text="27°" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,15"/>
+                                <TextBlock x:Name="txtTemp" Text="27°" Foreground="White" FontSize="28" FontWeight="Bold" Margin="0,15"/>
                     </StackPanel>
                 </Border>
 
